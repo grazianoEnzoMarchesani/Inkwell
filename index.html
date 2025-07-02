@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Blog</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="A personal blog built as a secure and high-performance Single-Page Application.">
+</head>
+<body>
+
+    <header class="main-header">
+        <!-- FIX: Main title H1 has been removed as requested -->
+        <div class="filters-container">
+            <!-- FIX: Placeholder text translated to English -->
+            <input type="search" id="search-input" placeholder="Search by title..." aria-label="Search by title">
+            <div id="year-filters" class="filter-group" aria-label="Filter by year"></div>
+            <div id="tag-filters" class="filter-group" aria-label="Filter by tag"></div>
+        </div>
+    </header>
+
+    <main>
+        <div id="posts-grid" class="posts-grid">
+            <!-- Post cards will be inserted here by JavaScript -->
+        </div>
+        <p id="no-results" class="no-results" style="display: none;">No posts match the selected filters.</p>
+    </main>
+
+    <!-- Modal for single post view -->
+    <div id="post-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display: none;">
+        <div class="modal-content">
+            <button id="close-modal" class="close-button" aria-label="Close post">×</button>
+            <article id="modal-post-content">
+                <!-- Sanitized post content will be inserted here -->
+            </article>
+        </div>
+    </div>
+
+    <!-- Libraries loaded at the end for optimal performance -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+    
+    <!-- Main application script -->
+    <script src="script.js"></script>
+
+</body>
+</html>

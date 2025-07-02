@@ -1,0 +1,3 @@
+* [Un Weekend tra le Colline della Toscana](posts/viaggio-in-toscana.md) - 2024-05-15 - img:https://picsum.photos/id/1047/600/400 - #viaggi, #italia, #toscana, #toscana2,  #ciao_ciao
+* [Introduzione a JavaScript Moderno](posts/primo-post-tecnico.md) - 2024-04-22 - img:https://picsum.photos/id/2/600/400 - #tecnologia, #javascript, #es6
+* [Il Mio Viaggio in Giappone](posts/viaggio-giappone.md) - 2023-10-26 - img:https://picsum.photos/id/1043/600/400 - #viaggi, #giappone
