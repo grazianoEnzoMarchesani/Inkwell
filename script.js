@@ -27,23 +27,43 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
             const markdownIndex = await response.text();
             
-            const postRegex = /\* \[([^\]]+)\]\(([^)]+)\) - ([\d-]+) - img:([^\s]+) - (.*)/;
-            
+            // --- FIX: NEW FLEXIBLE PARSING LOGIC ---
+            // This logic is more robust and doesn't rely on a strict order or spacing.
             const parsedPosts = markdownIndex.split('\n')
                 .map(line => line.trim())
-                .filter(line => line.startsWith('* ['))
+                .filter(line => line.startsWith('* [')) // Process only lines that look like post entries
                 .map(line => {
-                    const match = line.match(postRegex);
-                    if (!match) return null;
+                    // 1. Extract the required parts: Title and Path
+                    const mainPartRegex = /\* \[([^\]]+)\]\(([^)]+)\)(.*)/;
+                    const mainMatch = line.match(mainPartRegex);
 
-                    const [, title, path, date, image, tagsString] = match;
-                    const tags = tagsString.split(',')
-                                        .map(tag => tag.trim().replace('#', ''))
-                                        .filter(tag => tag);
+                    if (!mainMatch) return null; // Skip malformed lines
+
+                    const [, title, path, metadataString] = mainMatch;
+
+                    // 2. Extract metadata from the rest of the string, regardless of order.
+                    
+                    // Find Date (YYYY-MM-DD)
+                    const dateMatch = metadataString.match(/\d{4}-\d{2}-\d{2}/);
+                    // Fallback to today's date if not found
+                    const date = dateMatch ? dateMatch[0] : new Date().toISOString().split('T')[0];
+
+                    // Find Image URL (img: followed by a URL)
+                    const imageMatch = metadataString.match(/img:\s*([^\s]+)/);
+                    // Fallback to a placeholder image if not found
+                    const image = imageMatch ? imageMatch[1] : 'https://picsum.photos/id/1018/600/400';
+
+                    // Find all Tags (#tag)
+                    const tagRegex = /#([\w\-_]+)/g; // Allows letters, numbers, underscore, and hyphen in tags
+                    const tags = [];
+                    let tagMatch;
+                    while ((tagMatch = tagRegex.exec(metadataString)) !== null) {
+                        tags.push(tagMatch[1]);
+                    }
                     
                     return { title, path, date, image, tags };
                 })
-                .filter(post => post !== null);
+                .filter(post => post !== null); // Remove any lines that failed to parse
 
             allPosts = parsedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
